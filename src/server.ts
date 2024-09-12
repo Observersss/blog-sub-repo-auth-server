@@ -5,7 +5,7 @@ import {pool} from "./config/db";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5013;
 const BASE_URL = '/api/auth';
 
 app.use(express.json());
@@ -20,7 +20,8 @@ async function startApp(){
         } else {
             console.log('Connected to the database');
         }
-    })
+    });
+
     app.listen(PORT,() => {
         console.log(`Server has been started on port:${PORT}`);
     });
