@@ -1,14 +1,19 @@
 import {Request,Response} from "express";
-import {UserInterface} from "../interfaces/UserInterface";
+import {UserInterface} from "../types/custom/UserInterface";
 import TokenService from "../service/TokenService";
 import AuthService from "../service/AuthService";
 import jwt from "jsonwebtoken";
+import {UserReqInterface} from "../types/custom/UserReqInterface";
 
 class AuthController {
-    async registry(req:Request<{},{}, UserInterface>,res:Response){
+    async registry(req:Request<{},{}, UserReqInterface>,res:Response){
         try{
-            const {user} = req.body;
+            const user = req.body;
+
             // const newUser = await UserService.create(user);
+
+            const newUser:UserInterface= null;
+
 
             // res.status(200).json(newUser.rows[0]);
             res.status(200);
@@ -27,15 +32,14 @@ class AuthController {
             const {username,password} = req.body;
             const user = await AuthService.login(username,password);
 
-            const access_token = TokenService.generateAccessToken(user.id, user.username);
-            const refresh_token = TokenService.generateRefreshToken(user.id);
+            const [refreshToken,accessToken] = TokenService.generateTokens(user.id,user.username);
 
             // const userUpdated = await UserService.setRefreshToken(user.id,refresh_token);
 
             res.status(200).json({
                 // user:userUpdated.rows[0],
-                access_token,
-                refresh_token
+                refreshToken,
+                accessToken
             });
         }catch (e:any) {
             res.status(500).json({name:e.name,message:e.message});

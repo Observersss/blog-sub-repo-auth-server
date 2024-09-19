@@ -1,6 +1,8 @@
 export interface UserInterface {
-    id?:number,
+    id?:number | null,
     username:string,
     password:string,
     email:string,
+    isActivated:string |false;
+    refreshToken:string | null;
 }

@@ -10,7 +10,7 @@ const BASE_URL = '/api/auth';
 
 app.use(express.json());
 
-app.use(AuthRouter);
+app.use(BASE_URL,AuthRouter);
 
 
 async function startApp(){
