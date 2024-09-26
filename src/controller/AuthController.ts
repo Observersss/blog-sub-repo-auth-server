@@ -1,22 +1,20 @@
 import {Request,Response} from "express";
-import {UserInterface} from "../types/custom/UserInterface";
 import TokenService from "../service/TokenService";
 import AuthService from "../service/AuthService";
 import jwt from "jsonwebtoken";
-import {UserReqInterface} from "../types/custom/UserReqInterface";
+import {CustomUserInterface, CustomUserRequestInterface} from "../types/custom";
 
 class AuthController {
-    async registry(req:Request<{},{}, UserReqInterface>,res:Response){
+    async registry(req:Request<{},{}, CustomUserRequestInterface>,res:Response){
         try{
             const user = req.body;
 
-            // const newUser = await UserService.create(user);
+            const newUser =await fetch('http://localhost:5012/api/user/', {
+                method: "POST",
+                body: JSON.stringify(user)
+            }) as CustomUserInterface;
 
-            const newUser:UserInterface= null;
-
-
-            // res.status(200).json(newUser.rows[0]);
-            res.status(200);
+            res.status(200).json({user: newUser});
         }catch (e:any) {
             switch (e.name){
                 case "TypeError":
@@ -30,7 +28,7 @@ class AuthController {
     async login(req:Request,res:Response){
         try{
             const {username,password} = req.body;
-            const user = await AuthService.login(username,password);
+            const user = await AuthService.login(username,password) as CustomUserInterface;
 
             const [refreshToken,accessToken] = TokenService.generateTokens(user.id,user.username);
 

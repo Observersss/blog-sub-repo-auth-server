@@ -1,6 +1,6 @@
 import {pool} from "../config/db";
 import bcrypt from "bcrypt";
-import {UserInterface} from "../types/custom/UserInterface";
+import {CustomUserInterface} from "../types/custom";
 class AuthService {
     async registry (user){}
     async login (username:string,password:string){
@@ -18,7 +18,7 @@ class AuthService {
             throw new Error("Invalid username or password")
         }
 
-        return user.rows[0] as UserInterface;
+        return user.rows[0] as CustomUserInterface;
     }
     async refresh (refresh_token){}
     async activate (){}
